@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FlowLayout">
+        <attr name="column_space" format="dimension"/>
+        <attr name="row_space" format="dimension" />
+        <attr name="maxLines" format="integer" />
+    </declare-styleable>
+</resources>
