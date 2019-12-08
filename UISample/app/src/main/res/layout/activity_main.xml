@@ -6,65 +6,143 @@
     android:layout_height="wrap_content"
     tools:context=".MainActivity">
 
-    <com.muy.uisample.view.FlowLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        app:column_space="5dp"
-        app:row_space="10dp">
+        android:orientation="vertical">
+
+        <com.muy.uisample.view.FlowLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:column_space="5dp"
+            app:row_space="10dp">
+
+            <TextView
+                style="@style/Tag"
+                android:text="美食" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="超级无敌海景房" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="天下第一" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="风景怡人" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="经济实惠" />
+
+            <TextView
+                style="@style/Tag"
+                android:layout_height="100dp"
+                android:text="交通便利" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="历史悠久" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="最佳旅游胜地" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="有情人终成眷属" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="世外桃源" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="丰富多彩" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="游玩" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="时尚之都" />
+
+        </com.muy.uisample.view.FlowLayout>
 
         <TextView
-            style="@style/Tag"
-            android:text="美食" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18sp"
+            android:paddingStart="10dp"
+            android:textStyle="bold"
+            android:text="限制2行数"/>
 
-        <TextView
-            style="@style/Tag"
-            android:text="超级无敌海景房" />
+        <com.muy.uisample.view.FlowLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:column_space="5dp"
+            app:maxLines="2"
+            app:row_space="10dp">
 
-        <TextView
-            style="@style/Tag"
-            android:text="天下第一" />
+            <TextView
+                style="@style/Tag"
+                android:text="美食" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="风景怡人" />
+            <TextView
+                style="@style/Tag"
+                android:text="超级无敌海景房" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="经济实惠" />
+            <TextView
+                style="@style/Tag"
+                android:text="天下第一" />
 
-        <TextView
-            style="@style/Tag"
-            android:layout_height="100dp"
-            android:text="交通便利" />
+            <TextView
+                style="@style/Tag"
+                android:text="风景怡人" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="历史悠久" />
+            <TextView
+                style="@style/Tag"
+                android:text="经济实惠" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="最佳旅游胜地" />
+            <TextView
+                style="@style/Tag"
+                android:layout_height="100dp"
+                android:text="交通便利" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="有情人终成眷属" />
+            <TextView
+                style="@style/Tag"
+                android:text="历史悠久" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="世外桃源" />
+            <TextView
+                style="@style/Tag"
+                android:text="最佳旅游胜地" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="丰富多彩" />
+            <TextView
+                style="@style/Tag"
+                android:text="有情人终成眷属" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="游玩" />
+            <TextView
+                style="@style/Tag"
+                android:text="世外桃源" />
 
-        <TextView
-            style="@style/Tag"
-            android:text="时尚之都" />
+            <TextView
+                style="@style/Tag"
+                android:text="丰富多彩" />
 
-    </com.muy.uisample.view.FlowLayout>
+            <TextView
+                style="@style/Tag"
+                android:text="游玩" />
+
+            <TextView
+                style="@style/Tag"
+                android:text="时尚之都" />
+
+        </com.muy.uisample.view.FlowLayout>
+    </LinearLayout>
 </ScrollView>

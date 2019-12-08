@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import com.muy.uisample.R;
 import com.muy.uisample.utils.UIUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by James on 2019-11-30.
  * Desc:
@@ -18,6 +21,10 @@ public class FlowLayout extends ViewGroup {
 
     private int mColumnSpace;
     private int mRowSpace;
+    private int mMaxLines; // 最多显示的行数，0代表不做限制
+
+    private List<List<View>> mAllRowsViews;
+    private List<Integer> mAllRowsHeights;
 
     public FlowLayout(Context context) {
         this(context, null);
@@ -36,6 +43,7 @@ public class FlowLayout extends ViewGroup {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout);
         mColumnSpace = a.getDimensionPixelSize(R.styleable.FlowLayout_column_space, 0);
         mRowSpace = a.getDimensionPixelSize(R.styleable.FlowLayout_row_space, 0);
+        mMaxLines = a.getInteger(R.styleable.FlowLayout_maxLines, 0);
         // 记得一定要调用recycle()
         a.recycle();
     }
@@ -58,8 +66,21 @@ public class FlowLayout extends ViewGroup {
         mRowSpace = size;
     }
 
+    /**
+     * 设置最多显示行数
+     *
+     * @param maxLines
+     */
+    public void setMaxLines(int maxLines) {
+        mMaxLines = maxLines;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // 可能会被调用多次，需要重新初始化
+        mAllRowsViews = new ArrayList<>();
+        mAllRowsHeights = new ArrayList<>();
+
         // 获取当前view的模式（mode）和宽高值（size）
         int widthSie = MeasureSpec.getSize(widthMeasureSpec);
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -81,6 +102,8 @@ public class FlowLayout extends ViewGroup {
 
         int childCount = getChildCount();
 
+        ArrayList<View> childViews = new ArrayList<>();
+
         for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
             if (child.getVisibility() == GONE) {
@@ -100,17 +123,26 @@ public class FlowLayout extends ViewGroup {
             int columnSpace = i > 0 ? mColumnSpace : 0;
             usedWidth += columnSpace + childWidth;
 
-            if (usedWidth <= maxWidthSize) {
-                if (childHeight > maxChildHeight) {
-                    // 取当前行child高度最大的
-                    maxChildHeight = childHeight;
+            if (usedWidth > maxWidthSize) {
+                // 超过一行，需要换行
+                mAllRowsViews.add(childViews);
+                mAllRowsHeights.add(maxChildHeight);
+
+                if (mMaxLines > 0 && mAllRowsViews.size() == mMaxLines) {
+                    // 已达到最多显示的行数，舍弃多余的view
+                    break;
                 }
-            } else {
-                usedWidth = childWidth;
-                // 如果超过一行，需要换行，高度需要增加
+                childViews = new ArrayList<>();
+
                 totalHeight += mRowSpace + maxChildHeight;
                 maxChildHeight = childHeight;
+                usedWidth = childWidth;
+            } else {
+                // 获取当前行child高度最大值
+                maxChildHeight = Math.max(childHeight, maxChildHeight);
             }
+
+            childViews.add(child);
         }
         // 加上最后一行子view中最大高度
         totalHeight += maxChildHeight;
@@ -124,55 +156,25 @@ public class FlowLayout extends ViewGroup {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-    }
-
-    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        // 计算可排列布局的宽度
-        int maxWidth = r - l - getPaddingLeft() - getPaddingRight();
+        int rowNum = mAllRowsViews.size();
 
         int left = getPaddingLeft();
         int top = getPaddingTop();
-        int usedWidth = 0;
-        int maxHeight = 0;
 
-        int childCount = getChildCount();
+        for (int i = 0; i < rowNum; i++) {
+            List<View> rowViews = mAllRowsViews.get(i);
+            int height = mAllRowsHeights.get(i);
 
-        for (int i = 0; i < childCount; i++) {
-            View child = getChildAt(i);
-            if (child.getVisibility() == GONE) {
-                continue;
+            for (View child : rowViews) {
+                int right = left + child.getMeasuredWidth();
+                int bottom = top + child.getMeasuredHeight();
+                child.layout(left, top, right, bottom);
+                left = right + mColumnSpace;
             }
 
-            int childWidth = child.getMeasuredWidth();
-            int childHeight = child.getMeasuredHeight();
-
-            // 第一个子view前面不需要加间隔
-            int rowSpace = i > 0 ? mColumnSpace : 0;
-            usedWidth += childWidth + rowSpace;
-
-            if (usedWidth <= maxWidth) {
-                // 记录当前行view的最大高度
-                if (maxHeight < childHeight) {
-                    maxHeight = childHeight;
-                }
-            } else {
-                // 如果换行，需要重新设置起始点
-                left = getPaddingLeft();
-                // 加上上一行view的最大高度和间隔当作当前行的y坐标值
-                top += maxHeight + mRowSpace;
-                usedWidth = childWidth;
-                maxHeight = childHeight;
-            }
-
-            int right = left + childWidth;
-            int bottom = top + childHeight;
-
-            child.layout(left, top, right, bottom);
-            // 一定到下一个子view的起始点
-            left += childWidth + mColumnSpace;
+            left = getPaddingLeft();
+            top += height + mRowSpace;
         }
     }
 }
