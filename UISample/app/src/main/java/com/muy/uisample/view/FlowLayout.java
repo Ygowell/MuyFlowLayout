@@ -101,7 +101,7 @@ public class FlowLayout extends ViewGroup {
             usedWidth += columnSpace + childWidth;
 
             if (usedWidth <= maxWidthSize) {
-                if (childHeight > totalHeight) {
+                if (childHeight > maxChildHeight) {
                     // 取当前行child高度最大的
                     maxChildHeight = childHeight;
                 }
